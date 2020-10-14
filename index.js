@@ -8,15 +8,19 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/jokes/random', (req, res) => {
+app.get('/tajine/imagelist', (req, res) => {
   request(
-    { url: 'https://joke-api-strict-cors.appspot.com/jokes/random' },
+    // { url: 'https://tajine.ey.r.appspot.com/images/imagelist.json' },
+    { url: 'https://localhost:3001/images/imagelist.json' },
     (error, response, body) => {
       if (error || response.statusCode !== 200) {
-        return res.status(500).json({ type: 'error', message: err.message });
+        return res.status(500).json({ type: 'error', message: error.message });
       }
-
-      res.json(JSON.parse(body));
+      try {
+        res.json(JSON.parse(body));
+      } catch( parseError ) {
+        res.status(500).json({ type: 'error', message: parseError.message });
+      }
     }
   )
 });
